@@ -1,13 +1,13 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\AuthController;
 use App\Http\Controllers\PostController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\SearchController;
 use App\Http\Controllers\Admin\AdminController;
 use App\Http\Controllers\Admin\PostController as AdminPostController;
 use App\Http\Controllers\Admin\CategoryController;
+use App\Http\Controllers\SavedPostController;
 
 // صفحه اصلی
 Route::get('/', [HomeController::class, 'index'])->name('home');
@@ -22,19 +22,8 @@ Route::get('/portfolio', fn() => redirect('/'))->name('portfolio');
 Route::get('/blog', fn() => redirect('/'))->name('blog');
 Route::get('/contact', fn() => redirect('/'))->name('contact');
 
-// احراز هویت
-Route::get('/login', [AuthController::class, 'showLoginForm'])->name('login');
-Route::post('/login', [AuthController::class, 'login']);
-Route::get('/register', [AuthController::class, 'showRegisterForm'])->name('register');
-Route::post('/register', [AuthController::class, 'register']);
-Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
-
-// پنل کاربری
+// User-specific routes (Posts, Saved Posts, etc.)
 Route::middleware('auth')->group(function () {
-    Route::get('/dashboard', [AuthController::class, 'dashboard'])->name('dashboard');
-    Route::get('/profile', [AuthController::class, 'profile'])->name('profile');
-    Route::put('/profile', [AuthController::class, 'updateProfile'])->name('profile.update');
-
     // پست‌های کاربری (غیر ادمین)
     Route::get('/posts', [PostController::class, 'index'])->name('posts.index');
     Route::get('/posts/create', [PostController::class, 'create'])->name('posts.create');
@@ -52,8 +41,8 @@ Route::middleware('auth')->group(function () {
     Route::get('/articles/create', [PostController::class, 'create'])->name('articles.create');
 
     // Saved Posts
-    Route::post('/posts/{post}/save', [App\Http\Controllers\SavedPostController::class, 'toggleSave'])->name('posts.save');
-    Route::get('/dashboard/saved', [App\Http\Controllers\SavedPostController::class, 'index'])->name('dashboard.saved');
+    Route::post('/posts/{post}/save', [SavedPostController::class, 'toggleSave'])->name('posts.save');
+    Route::get('/dashboard/saved', [SavedPostController::class, 'index'])->name('dashboard.saved');
 });
 
 // پنل ادمین

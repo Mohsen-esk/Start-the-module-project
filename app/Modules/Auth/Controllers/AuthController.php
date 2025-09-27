@@ -1,7 +1,8 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Modules\Auth\Controllers;
 
+use App\Http\Controllers\Controller;
 use App\Models\User;
 use App\Models\Post;
 use Illuminate\Http\Request;
@@ -18,7 +19,7 @@ class AuthController extends Controller
         if (Auth::check()) {
             return redirect()->route('dashboard');
         }
-        return view('auth.login');
+        return view('Auth::login');
     }
 
     public function showRegisterForm()
@@ -26,7 +27,7 @@ class AuthController extends Controller
         if (Auth::check()) {
             return redirect()->route('dashboard');
         }
-        return view('auth.register');
+        return view('Auth::register');
     }
 
     public function login(Request $request)
@@ -119,12 +120,12 @@ class AuthController extends Controller
         $total_views = Post::where('user_id', $user->id)->where('published', true)->sum('views_count');
         $total_likes = Post::where('user_id', $user->id)->where('published', true)->sum('likes_count');
 
-        return view('auth.dashboard', compact('user', 'posts_count', 'published_posts_count', 'recent_posts', 'total_views', 'total_likes'));
+        return view('Auth::dashboard', compact('user', 'posts_count', 'published_posts_count', 'recent_posts', 'total_views', 'total_likes'));
     }
 
     public function profile()
     {
-        return view('auth.profile', ['user' => Auth::user()]);
+        return view('Auth::profile', ['user' => Auth::user()]);
     }
 
     public function updateProfile(Request $request)

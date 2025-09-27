@@ -1,7 +1,7 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
-use App\Modules\Auth\Controllers\AuthController;
+use Modules\Auth\Controllers\AuthController;
 
 // احراز هویت
 Route::get('/login', [AuthController::class, 'showLoginForm'])->name('login');

@@ -7,5 +7,5 @@ return [
     /*
      * Module Service Providers...
      */
-    App\Modules\Auth\AuthServiceProvider::class,
+    Modules\Auth\AuthServiceProvider::class,
 ];

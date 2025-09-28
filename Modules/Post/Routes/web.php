@@ -2,6 +2,7 @@
 
 use Illuminate\Support\Facades\Route;
 use Modules\Post\Controllers\CommentController;
+use Modules\Post\Controllers\LikeController;
 use Modules\Post\Controllers\PostController;
 use Modules\Post\Controllers\SavedPostController;
 
@@ -32,6 +33,9 @@ Route::middleware('auth')->group(function () {
 
     // Comments
     Route::post('/posts/{post}/comments', [CommentController::class, 'store'])->name('posts.comments.store');
+
+    // Likes
+    Route::post('/posts/{post}/like', [LikeController::class, 'toggleLike'])->name('posts.like');
 });
 
 // API Routes

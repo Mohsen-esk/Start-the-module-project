@@ -29,7 +29,7 @@
                     <header class="post-header-section">
                         <div class="post-category-badge">
                             <i class="fas fa-bookmark"></i>
-                            پست
+                            {{ $post->category->name ?? 'بدون دسته' }}
                         </div>
                         <h1 class="post-main-title">{{ $post->title }}</h1>
                         
@@ -128,7 +128,7 @@
                                 </div>
                                 <div class="stat-item">
                                     <i class="fas fa-heart"></i>
-                                    <span>{{ $post->likes_count ?? 0 }}</span>
+                                    <span>{{ $post->likes->count() }}</span>
                                     <span>لایک</span>
                                 </div>
                                 <div class="stat-item">
@@ -147,10 +147,22 @@
                                 </a>
                                 
                                 @auth
+                                    <form action="{{ route('posts.like', $post) }}" method="POST" style="display: inline;">
+                                        @csrf
+                                        <button type="submit" class="btn btn-like {{ Auth::user()->likedPosts->contains($post) ? 'liked' : '' }}">
+                                            @if(Auth::user()->likedPosts->contains($post))
+                                                <i class="fas fa-heart"></i>
+                                                <span>لایک شده</span>
+                                            @else
+                                                <i class="far fa-heart"></i>
+                                                <span>لایک</span>
+                                            @endif
+                                        </button>
+                                    </form>
                                     <form action="{{ route('posts.save', $post) }}" method="POST" style="display: inline;">
                                         @csrf
                                         <button type="submit" class="btn btn-info">
-                                            @if(Auth::check() && Auth::user()->savedPosts->contains($post))
+                                            @if(Auth::user()->savedPosts->contains($post))
                                                 <i class="bi bi-bookmark-fill"></i>
                                                 <span>ذخیره شده</span>
                                             @else
@@ -678,6 +690,19 @@
     color: white;
     text-decoration: none;
     background: linear-gradient(135deg, #c53030 0%, #e53e3e 100%);
+}
+
+.btn-like {
+    background: white;
+    color: #ef4444;
+    border: 2px solid #ef4444;
+}
+
+.btn-like.liked,
+.btn-like:hover {
+    background: #ef4444;
+    color: white;
+    text-decoration: none;
 }
 
 .modal-overlay {

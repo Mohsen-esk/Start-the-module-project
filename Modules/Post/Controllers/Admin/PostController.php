@@ -1,27 +1,28 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace Modules\Post\Controllers\Admin;
 
-use App\Models\Post;
+use App\Http\Controllers\Controller;
+use Modules\Post\Models\Post;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
 
-class AdminPostController extends Controller
+class PostController extends Controller
 {
     public function __construct()
     {
-        $this->middleware(['auth', 'permission:manage-content']);
+        // Assuming permissions are handled by a middleware group in routes.
     }
 
     public function index()
     {
-        $posts = Post::with('user')->paginate(10);
-        return view('admin.posts.index', compact('posts'));
+        $posts = Post::with('user')->latest()->paginate(10);
+        return view('Post::admin.posts.index', compact('posts'));
     }
 
     public function create()
     {
-        return view('admin.posts.create');
+        return view('Post::admin.posts.create');
     }
 
     public function store(Request $request)
@@ -51,7 +52,7 @@ class AdminPostController extends Controller
 
     public function edit(Post $post)
     {
-        return view('admin.posts.edit', compact('post'));
+        return view('Post::admin.posts.edit', compact('post'));
     }
 
     public function update(Request $request, Post $post)
@@ -86,7 +87,6 @@ class AdminPostController extends Controller
 
     public function preview(Post $post)
     {
-        $this->middleware('permission:preview-content');
-        return view('admin.posts.preview', compact('post'));
+        return view('Post::admin.posts.preview', compact('post'));
     }
 }

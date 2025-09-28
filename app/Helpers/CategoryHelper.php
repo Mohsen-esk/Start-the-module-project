@@ -2,7 +2,7 @@
 
 namespace App\Helpers;
 
-use App\Models\Category;
+use Modules\Post\Models\Category;
 use Illuminate\Support\Facades\Cache;
 
 class CategoryHelper

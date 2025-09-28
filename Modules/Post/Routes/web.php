@@ -1,6 +1,8 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use Modules\Post\Controllers\CommentController;
+use Modules\Post\Controllers\LikeController;
 use Modules\Post\Controllers\PostController;
 use Modules\Post\Controllers\SavedPostController;
 
@@ -28,6 +30,12 @@ Route::middleware('auth')->group(function () {
     // Saved Posts
     Route::post('/posts/{post}/save', [SavedPostController::class, 'toggleSave'])->name('posts.save');
     Route::get('/dashboard/saved', [SavedPostController::class, 'index'])->name('dashboard.saved');
+
+    // Comments
+    Route::post('/posts/{post}/comments', [CommentController::class, 'store'])->name('posts.comments.store');
+
+    // Likes
+    Route::post('/posts/{post}/like', [LikeController::class, 'toggleLike'])->name('posts.like');
 });
 
 // API Routes

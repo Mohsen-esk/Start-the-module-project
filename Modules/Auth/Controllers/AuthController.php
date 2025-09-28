@@ -11,6 +11,7 @@ use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\ValidationException;
+use Illuminate\Support\Facades\DB;
 
 class AuthController extends Controller
 {
@@ -118,7 +119,10 @@ class AuthController extends Controller
         $published_posts_count = Post::where('user_id', $user->id)->where('published', true)->count();
         $recent_posts = Post::where('user_id', $user->id)->where('published', true)->latest()->take(3)->get();
         $total_views = Post::where('user_id', $user->id)->where('published', true)->sum('views_count');
-        $total_likes = Post::where('user_id', $user->id)->where('published', true)->sum('likes_count');
+
+        // Calculate total likes using the new relationship-based system
+        $post_ids = Post::where('user_id', $user->id)->where('published', true)->pluck('id');
+        $total_likes = DB::table('post_likes')->whereIn('post_id', $post_ids)->count();
 
         return view('Auth::dashboard', compact('user', 'posts_count', 'published_posts_count', 'recent_posts', 'total_views', 'total_likes'));
     }

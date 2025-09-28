@@ -46,19 +46,16 @@ class Post extends Model
         'meta_description',
         'status',
         'views_count',
-        'likes_count',
     ];
 
     protected $casts = [
         'published' => 'boolean',
         'published_at' => 'datetime',
         'views_count' => 'integer',
-        'likes_count' => 'integer',
     ];
 
     protected $attributes = [
         'views_count' => 0,
-        'likes_count' => 0,
         'published' => true,
     ];
 
@@ -74,7 +71,7 @@ class Post extends Model
 
     public function comments()
     {
-        return $this->hasMany(Comment::class);
+        return $this->hasMany(Comment::class)->latest();
     }
 
     // متد کمکی برای افزایش بازدید
@@ -84,14 +81,13 @@ class Post extends Model
         return $this;
     }
 
-    // متد کمکی برای افزایش لایک
-    public function incrementLikes()
-    {
-        $this->increment('likes_count');
-        return $this;
-    }
     public function savers()
     {
         return $this->belongsToMany(User::class, 'saved_posts')->withTimestamps();
+    }
+
+    public function likes()
+    {
+        return $this->belongsToMany(User::class, 'post_likes')->withTimestamps();
     }
 }

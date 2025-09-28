@@ -3,9 +3,8 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\SearchController;
-use App\Http\Controllers\Admin\AdminController;
-use App\Http\Controllers\Admin\PostController as AdminPostController;
-use App\Http\Controllers\Admin\CategoryController;
+use Modules\Admin\Controllers\AdminController;
+use Modules\Post\Controllers\Admin\PostController as AdminPostController;
 
 // صفحه اصلی
 Route::get('/', [HomeController::class, 'index'])->name('home');

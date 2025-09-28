@@ -1,4 +1,3 @@
-```blade
 @extends('layouts.app')
 
 @section('title', $post->title . ' - Note Me')
@@ -30,7 +29,7 @@
                     <header class="post-header-section">
                         <div class="post-category-badge">
                             <i class="fas fa-bookmark"></i>
-                            پست
+                            {{ $post->category->name ?? 'بدون دسته' }}
                         </div>
                         <h1 class="post-main-title">{{ $post->title }}</h1>
                         
@@ -68,6 +67,57 @@
                         </div>
                     </div>
 
+                    {{-- Comments Section --}}
+                    <div class="post-comments-section">
+                        <h2 class="section-title">نظرات ({{ $post->comments->count() }})</h2>
+
+                        @auth
+                            <div class="comment-form-wrapper">
+                                <form action="{{ route('posts.comments.store', $post) }}" method="POST">
+                                    @csrf
+                                    <div class="form-group">
+                                        <label for="comment-content">نظر خود را بنویسید</label>
+                                        <textarea name="content" id="comment-content" rows="4" placeholder="نظر شما..." required></textarea>
+                                        @error('content')
+                                            <p class="error-message">{{ $message }}</p>
+                                        @enderror
+                                    </div>
+                                    <button type="submit" class="btn btn-primary">
+                                        <i class="fas fa-paper-plane"></i>
+                                        ارسال نظر
+                                    </button>
+                                </form>
+                            </div>
+                        @else
+                            <div class="login-prompt">
+                                <p>برای ثبت نظر، لطفاً <a href="{{ route('login') }}">وارد شوید</a> یا <a href="{{ route('register') }}">ثبت‌نام کنید</a>.</p>
+                            </div>
+                        @endauth
+
+                        <div class="comments-list">
+                            @forelse ($post->comments as $comment)
+                                <div class="comment-item">
+                                    <div class="comment-author-avatar">
+                                        <img src="{{ $comment->user->avatar }}" alt="{{ $comment->user->name }}">
+                                    </div>
+                                    <div class="comment-body">
+                                        <div class="comment-header">
+                                            <span class="comment-author-name">{{ $comment->user->name }}</span>
+                                            <span class="comment-date">{{ $comment->created_at->diffForHumans() }}</span>
+                                        </div>
+                                        <div class="comment-content">
+                                            <p>{{ $comment->content }}</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            @empty
+                                <div class="no-comments">
+                                    <p>هنوز نظری ثبت نشده است. اولین نفر باشید!</p>
+                                </div>
+                            @endforelse
+                        </div>
+                    </div>
+
                     <footer class="post-footer-section">
                         <div class="post-engagement">
                             <div class="engagement-stats">
@@ -78,12 +128,12 @@
                                 </div>
                                 <div class="stat-item">
                                     <i class="fas fa-heart"></i>
-                                    <span>{{ $post->likes_count ?? 0 }}</span>
+                                    <span>{{ is_countable($post->likes) ? $post->likes->count() : 0 }}</span>
                                     <span>لایک</span>
                                 </div>
                                 <div class="stat-item">
                                     <i class="fas fa-comment"></i>
-                                    <span>0</span>
+                                    <span>{{ $post->comments->count() }}</span>
                                     <span>نظر</span>
                                 </div>
                             </div>
@@ -97,10 +147,22 @@
                                 </a>
                                 
                                 @auth
+                                    <form action="{{ route('posts.like', $post) }}" method="POST" style="display: inline;">
+                                        @csrf
+                                        <button type="submit" class="btn btn-like {{ (Auth::user()->likedPosts && Auth::user()->likedPosts->contains($post)) ? 'liked' : '' }}">
+                                            @if(Auth::user()->likedPosts && Auth::user()->likedPosts->contains($post))
+                                                <i class="fas fa-heart"></i>
+                                                <span>لایک شده</span>
+                                            @else
+                                                <i class="far fa-heart"></i>
+                                                <span>لایک</span>
+                                            @endif
+                                        </button>
+                                    </form>
                                     <form action="{{ route('posts.save', $post) }}" method="POST" style="display: inline;">
                                         @csrf
                                         <button type="submit" class="btn btn-info">
-                                            @if(Auth::check() && Auth::user()->savedPosts->contains($post))
+                                            @if(Auth::user()->savedPosts && Auth::user()->savedPosts->contains($post))
                                                 <i class="bi bi-bookmark-fill"></i>
                                                 <span>ذخیره شده</span>
                                             @else
@@ -384,6 +446,7 @@
 
 .post-content-section {
     padding: 40px;
+    padding-bottom: 0;
 }
 
 .content-wrapper {
@@ -395,6 +458,133 @@
 
 .content-wrapper p {
     margin-bottom: 1.5rem;
+}
+
+/* Comments Section */
+.post-comments-section {
+    padding: 40px;
+    margin-top: 20px;
+    background-color: #ffffff;
+    border-top: 1px solid #e2e8f0;
+}
+
+.section-title {
+    font-size: 1.8rem;
+    font-weight: 700;
+    color: #2d3748;
+    margin-bottom: 30px;
+    padding-bottom: 15px;
+    border-bottom: 2px solid #e369f3;
+    display: inline-block;
+}
+
+.comment-form-wrapper {
+    margin-bottom: 40px;
+    background: #f8fafc;
+    padding: 25px;
+    border-radius: 15px;
+    border: 1px solid #e2e8f0;
+}
+
+.comment-form-wrapper .form-group {
+    margin-bottom: 20px;
+}
+
+.comment-form-wrapper label {
+    display: block;
+    font-weight: 600;
+    color: #4a5568;
+    margin-bottom: 10px;
+}
+
+.comment-form-wrapper textarea {
+    width: 100%;
+    padding: 12px 15px;
+    border-radius: 10px;
+    border: 1px solid #cbd5e0;
+    font-family: inherit;
+    font-size: 1rem;
+    transition: all 0.3s ease;
+}
+
+.comment-form-wrapper textarea:focus {
+    outline: none;
+    border-color: #9334af;
+    box-shadow: 0 0 0 3px rgba(147, 52, 175, 0.2);
+}
+
+.error-message {
+    color: #e53e3e;
+    font-size: 0.875rem;
+    margin-top: 5px;
+}
+
+.login-prompt {
+    text-align: center;
+    padding: 20px;
+    background: #f8fafc;
+    border-radius: 15px;
+    margin-bottom: 40px;
+    border: 1px solid #e2e8f0;
+}
+
+.login-prompt a {
+    color: #9334af;
+    font-weight: 600;
+    text-decoration: none;
+}
+.login-prompt a:hover {
+    text-decoration: underline;
+}
+
+.comments-list .comment-item {
+    display: flex;
+    gap: 15px;
+    padding: 20px 0;
+    border-bottom: 1px solid #e2e8f0;
+}
+.comments-list .comment-item:last-child {
+    border-bottom: none;
+}
+
+.comment-author-avatar img {
+    width: 45px;
+    height: 45px;
+    border-radius: 50%;
+    object-fit: cover;
+}
+
+.comment-body {
+    flex: 1;
+}
+
+.comment-header {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 8px;
+}
+
+.comment-author-name {
+    font-weight: 600;
+    color: #2d3748;
+}
+
+.comment-date {
+    font-size: 0.8rem;
+    color: #718096;
+}
+
+.comment-content p {
+    margin: 0;
+    color: #4a5568;
+    line-height: 1.7;
+}
+
+.no-comments {
+    text-align: center;
+    padding: 30px;
+    color: #718096;
 }
 
 .post-footer-section {
@@ -500,6 +690,19 @@
     color: white;
     text-decoration: none;
     background: linear-gradient(135deg, #c53030 0%, #e53e3e 100%);
+}
+
+.btn-like {
+    background: white;
+    color: #ef4444;
+    border: 2px solid #ef4444;
+}
+
+.btn-like.liked,
+.btn-like:hover {
+    background: #ef4444;
+    color: white;
+    text-decoration: none;
 }
 
 .modal-overlay {

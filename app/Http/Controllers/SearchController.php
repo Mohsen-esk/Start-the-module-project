@@ -3,7 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\Models\Post; // فرض می‌کنیم مدل Post برای محتواها وجود دارد
+use Modules\Post\Models\Post; // فرض می‌کنیم مدل Post برای محتواها وجود دارد
 
 class SearchController extends Controller
 {

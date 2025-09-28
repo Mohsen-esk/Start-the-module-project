@@ -1,14 +1,15 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace Modules\Post\Controllers;
 
-use App\Models\Post;
+use Modules\Post\Models\Post;
 use App\Models\Category;
 use App\Helpers\CategoryHelper;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Storage;
+use App\Http\Controllers\Controller;
 
 class PostController extends Controller
 {
@@ -39,7 +40,7 @@ class PostController extends Controller
 
         $categories = CategoryHelper::getAllWithCount() ?? Category::all();
 
-        return view('posts.index', compact('posts', 'categories'));
+        return view('Post::posts.index', compact('posts', 'categories'));
     }
 
     public function index(Request $request)
@@ -64,7 +65,7 @@ class PostController extends Controller
 
         $categories = CategoryHelper::getAllWithCount() ?? Category::all();
 
-        return view('posts.index', compact('posts', 'categories'));
+        return view('Post::posts.index', compact('posts', 'categories'));
     }
 
     public function published(Request $request)
@@ -90,7 +91,7 @@ class PostController extends Controller
 
         $categories = CategoryHelper::getAllWithCount() ?? Category::all();
 
-        return view('posts.index', compact('posts', 'categories'));
+        return view('Post::posts.index', compact('posts', 'categories'));
     }
 
     public function views(Request $request)
@@ -115,7 +116,7 @@ class PostController extends Controller
 
         $categories = CategoryHelper::getAllWithCount() ?? Category::all();
 
-        return view('posts.index', compact('posts', 'categories'));
+        return view('Post::posts.index', compact('posts', 'categories'));
     }
 
     public function likes(Request $request)
@@ -140,7 +141,7 @@ class PostController extends Controller
 
         $categories = CategoryHelper::getAllWithCount() ?? Category::all();
 
-        return view('posts.index', compact('posts', 'categories'));
+        return view('Post::posts.index', compact('posts', 'categories'));
     }
 
     public function all(Request $request)
@@ -164,13 +165,13 @@ class PostController extends Controller
 
         $categories = CategoryHelper::getAllWithCount() ?? Category::all();
 
-        return view('posts.all', compact('posts', 'categories'));
+        return view('Post::posts.all', compact('posts', 'categories'));
     }
 
     public function create()
     {
         $categories = CategoryHelper::getAllWithCount() ?? Category::all();
-        return view('posts.create', compact('categories'));
+        return view('Post::posts.create', compact('categories'));
     }
 
     public function store(Request $request)
@@ -248,7 +249,7 @@ class PostController extends Controller
         }
 
         $post->increment('views_count'); // افزایش تعداد بازدید
-        return view('posts.show', compact('post'));
+        return view('Post::posts.show', compact('post'));
     }
 
     public function edit($id)
@@ -258,7 +259,7 @@ class PostController extends Controller
             return redirect()->route('posts.index')->with('error', 'شما مجاز به ویرایش این پست نیستید.');
         }
         $categories = CategoryHelper::getAllWithCount() ?? Category::all();
-        return view('posts.edit', compact('post', 'categories'));
+        return view('Post::posts.edit', compact('post', 'categories'));
     }
 
     public function update(Request $request, $id)

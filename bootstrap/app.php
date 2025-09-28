@@ -8,6 +8,7 @@ return Application::configure(basePath: dirname(__DIR__))
         web: [
             __DIR__.'/../routes/web.php',
             __DIR__.'/../Modules/Auth/Routes/web.php',
+            __DIR__.'/../Modules/Post/Routes/web.php',
         ],
         commands: __DIR__.'/../routes/console.php',
         health: '/up',

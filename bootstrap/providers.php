@@ -8,4 +8,5 @@ return [
      * Module Service Providers...
      */
     Modules\Auth\AuthServiceProvider::class,
+    Modules\Post\PostServiceProvider::class,
 ];

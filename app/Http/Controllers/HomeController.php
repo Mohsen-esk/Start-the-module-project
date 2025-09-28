@@ -3,7 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\Models\Post;
+use Modules\Post\Models\Post;
 use App\Models\User;
 use App\Models\Category;
 use Illuminate\Support\Facades\Cache;
@@ -450,7 +450,7 @@ public function about()
             12
         );
 
-        return view('posts.category', [
+        return view('Post::posts.category', [
             'posts' => $notes,
             'categoryName' => 'دلنوشته‌ها',
             'categoryDescription' => 'احساسات درونی که به کلمات تبدیل شده‌اند'
@@ -471,7 +471,7 @@ public function about()
             12
         );
 
-        return view('posts.category', [
+        return view('Post::posts.category', [
             'posts' => $books,
             'categoryName' => 'کتاب‌ها',
             'categoryDescription' => 'مجموعه‌ای از بهترین آثار ادبی و داستان‌ها'
@@ -492,7 +492,7 @@ public function about()
             12
         );
 
-        return view('posts.category', [
+        return view('Post::posts.category', [
             'posts' => $poems,
             'categoryName' => 'شعرها',
             'categoryDescription' => 'زیباترین اشعار و غزلیات'
@@ -513,7 +513,7 @@ public function about()
             12
         );
 
-        return view('posts.category', [
+        return view('Post::posts.category', [
             'posts' => $movies,
             'categoryName' => 'فیلم‌ها',
             'categoryDescription' => 'مجموعه‌ای از بهترین آثار سینمایی و ویدیوها'
@@ -534,7 +534,7 @@ public function about()
             12
         );
 
-        return view('posts.category', [
+        return view('Post::posts.category', [
             'posts' => $posts,
             'categoryName' => 'حرف حق',
             'categoryDescription' => 'مجموعه‌ای از سخنان حکیمانه و پندآموز'
@@ -555,7 +555,7 @@ public function about()
             12
         );
 
-        return view('posts.category', [
+        return view('Post::posts.category', [
             'posts' => $posts,
             'categoryName' => 'انگیزشی',
             'categoryDescription' => 'مطالبی برای افزایش انگیزه و امید به آینده'

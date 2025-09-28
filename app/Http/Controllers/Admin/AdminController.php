@@ -4,7 +4,7 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\User;
-use App\Models\Post;
+use Modules\Post\Models\Post;
 use Illuminate\Http\Request;
 use Spatie\Activitylog\Models\Activity;
 

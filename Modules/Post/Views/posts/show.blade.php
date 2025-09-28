@@ -149,8 +149,8 @@
                                 @auth
                                     <form action="{{ route('posts.like', $post) }}" method="POST" style="display: inline;">
                                         @csrf
-                                        <button type="submit" class="btn btn-like {{ Auth::user()->likedPosts->contains($post) ? 'liked' : '' }}">
-                                            @if(Auth::user()->likedPosts->contains($post))
+                                        <button type="submit" class="btn btn-like {{ (Auth::user()->likedPosts && Auth::user()->likedPosts->contains($post)) ? 'liked' : '' }}">
+                                            @if(Auth::user()->likedPosts && Auth::user()->likedPosts->contains($post))
                                                 <i class="fas fa-heart"></i>
                                                 <span>لایک شده</span>
                                             @else
@@ -162,7 +162,7 @@
                                     <form action="{{ route('posts.save', $post) }}" method="POST" style="display: inline;">
                                         @csrf
                                         <button type="submit" class="btn btn-info">
-                                            @if(Auth::user()->savedPosts->contains($post))
+                                            @if(Auth::user()->savedPosts && Auth::user()->savedPosts->contains($post))
                                                 <i class="bi bi-bookmark-fill"></i>
                                                 <span>ذخیره شده</span>
                                             @else

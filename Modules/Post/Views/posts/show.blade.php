@@ -128,7 +128,7 @@
                                 </div>
                                 <div class="stat-item">
                                     <i class="fas fa-heart"></i>
-                                    <span>{{ $post->likes->count() }}</span>
+                                    <span>{{ is_countable($post->likes) ? $post->likes->count() : 0 }}</span>
                                     <span>لایک</span>
                                 </div>
                                 <div class="stat-item">

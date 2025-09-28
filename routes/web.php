@@ -19,6 +19,7 @@ Route::get('/contact', fn() => redirect('/'))->name('contact');
 
 // پنل ادمین
 Route::prefix('admin')->name('admin.')->middleware(['auth', 'admin'])->group(function () {
+    // Main Admin Routes
     Route::get('/', [AdminController::class, 'index'])->name('dashboard');
     Route::get('/users', [AdminController::class, 'users'])->name('users');
     Route::patch('/users/{user}/role', [AdminController::class, 'updateRole'])->name('users.update-role');
@@ -28,7 +29,10 @@ Route::prefix('admin')->name('admin.')->middleware(['auth', 'admin'])->group(fun
     Route::patch('posts/{post}/publish', [AdminPostController::class, 'publish'])->name('posts.publish');
     Route::patch('posts/{post}/unpublish', [AdminPostController::class, 'unpublish'])->name('posts.unpublish');
     Route::post('posts/{post}/duplicate', [AdminPostController::class, 'duplicate'])->name('posts.duplicate');
-    Route::resource('categories', CategoryController::class);
+
+    // Post Module Admin Routes
+    require base_path('Modules/Post/Routes/admin.php');
+
     Route::get('activity-log', [AdminController::class, 'activityLog'])->name('activity_log.index');
 });
 

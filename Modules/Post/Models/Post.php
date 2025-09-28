@@ -2,9 +2,9 @@
 
 namespace Modules\Post\Models;
 
-use App\Models\Category;
-use App\Models\Comment;
-use App\Models\User;
+use Modules\Post\Models\Category;
+use Modules\Post\Models\Comment;
+use Modules\Auth\Models\User;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Spatie\Activitylog\LogOptions;

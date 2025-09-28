@@ -3,7 +3,7 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
-use App\Models\User;
+use Modules\Auth\Models\User;
 use Modules\Post\Models\Post;
 use Illuminate\Http\Request;
 use Spatie\Activitylog\Models\Activity;

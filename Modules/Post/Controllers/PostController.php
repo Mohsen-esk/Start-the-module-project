@@ -136,6 +136,7 @@ class PostController extends Controller
             ->when($categoryFilter, function ($query, $categoryFilter) {
                 return $query->where('category_id', $categoryFilter);
             })
+            ->withCount('likes')
             ->orderBy('likes_count', 'desc')
             ->paginate(9);
 
@@ -216,7 +217,6 @@ class PostController extends Controller
             'meta_title' => $request->meta_title,
             'meta_description' => $request->meta_description,
             'views_count' => 0,
-            'likes_count' => 0,
         ]);
 
         Cache::forget('home_page_data');
@@ -242,10 +242,10 @@ class PostController extends Controller
 
     public function show($slugOrId)
     {
-        $post = Post::with(['user', 'category', 'comments.user'])->where('slug', $slugOrId)->first();
+        $post = Post::with(['user', 'category', 'comments.user', 'likes'])->where('slug', $slugOrId)->first();
 
         if (!$post) {
-            $post = Post::with(['user', 'category', 'comments.user'])->findOrFail($slugOrId);
+            $post = Post::with(['user', 'category', 'comments.user', 'likes'])->findOrFail($slugOrId);
         }
 
         $post->increment('views_count'); // افزایش تعداد بازدید

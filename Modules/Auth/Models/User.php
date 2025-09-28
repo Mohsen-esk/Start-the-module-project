@@ -1,7 +1,5 @@
 <?php
-
 namespace Modules\Auth\Models;
-
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
@@ -14,7 +12,7 @@ use Spatie\Permission\Traits\HasRoles;
 class User extends Authenticatable
 {
     use HasFactory, Notifiable, HasRoles, LogsActivity;
-
+    
     public function getActivitylogOptions(): LogOptions
     {
         return LogOptions::defaults()
@@ -30,12 +28,12 @@ class User extends Authenticatable
                 return "کاربر \"{$this->name}\" را {$verb}";
             });
     }
-
+    
     protected $fillable = [
         'name', 'nickname', 'email', 'password', 'phone', 'work_field', 'avatar',
         'email_verified_at', 'last_login_at', 'status', 'role',
     ];
-
+    
     protected $casts = [
         'email_verified_at' => 'datetime',
         'last_login_at' => 'datetime',
@@ -43,12 +41,12 @@ class User extends Authenticatable
         'updated_at' => 'datetime',
         'status' => 'string',
     ];
-
+    
     public function isActive()
     {
         return $this->status === 'active';
     }
-
+    
     public function getAvatarAttribute($value)
     {
         if ($value) {
@@ -57,27 +55,27 @@ class User extends Authenticatable
         $initials = collect(explode(' ', $this->name))->map(fn($word) => mb_substr($word, 0, 1))->take(2)->join('');
         return 'https://ui-avatars.com/api/?name=' . urlencode($initials) . '&background=6366f1&color=ffffff&size=200';
     }
-
+    
     public function getMembershipDaysAttribute()
     {
         return $this->created_at->diffInDays(now());
     }
-
+    
     public function posts()
     {
         return $this->hasMany(Post::class);
     }
-
+    
     public function savedPosts()
     {
         return $this->belongsToMany(Post::class, 'saved_posts')->withTimestamps();
     }
-
+    
     public function likedPosts()
     {
         return $this->belongsToMany(Post::class, 'post_likes')->withTimestamps();
     }
-
+    
     public function comments()
     {
         return $this->hasMany(Comment::class);

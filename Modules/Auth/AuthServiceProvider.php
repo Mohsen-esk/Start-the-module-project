@@ -23,10 +23,6 @@ class AuthServiceProvider extends ServiceProvider
      */
     public function boot()
     {
-        // Load routes
-        \Illuminate\Support\Facades\Route::middleware('web')
-            ->group(__DIR__.'/Routes/web.php');
-
         // Load views
         $this->loadViewsFrom(__DIR__.'/Views', 'Auth');
     }

@@ -242,10 +242,10 @@ class PostController extends Controller
 
     public function show($slugOrId)
     {
-        $post = Post::with(['user', 'category'])->where('slug', $slugOrId)->first();
+        $post = Post::with(['user', 'category', 'comments.user'])->where('slug', $slugOrId)->first();
 
         if (!$post) {
-            $post = Post::with(['user', 'category'])->findOrFail($slugOrId);
+            $post = Post::with(['user', 'category', 'comments.user'])->findOrFail($slugOrId);
         }
 
         $post->increment('views_count'); // افزایش تعداد بازدید
